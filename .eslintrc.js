@@ -92,6 +92,8 @@ module.exports = {
             files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
             plugins: ['react'],
             rules: {
+                // todo to delete this line
+                'no-console': 'off',
                 'prefer-regex-literals': 'off',
                 'rulesdir/no-multiple-onyx-in-file': 'off',
                 'react-native-a11y/has-accessibility-hint': ['off'],

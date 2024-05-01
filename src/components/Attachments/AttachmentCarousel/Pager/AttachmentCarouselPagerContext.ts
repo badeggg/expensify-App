@@ -1,5 +1,6 @@
 import type {ForwardedRef} from 'react';
 import {createContext} from 'react';
+import type {PanGesture} from 'react-native-gesture-handler';
 import type PagerView from 'react-native-pager-view';
 import type {SharedValue} from 'react-native-reanimated';
 import type {AttachmentSource} from '@components/Attachments/types';
@@ -22,7 +23,7 @@ type AttachmentCarouselPagerContextValue = {
 
     /** The index of the active page */
     activePage: number;
-    pagerRef?: ForwardedRef<PagerView>;
+    pagerRef?: ForwardedRef<PagerView> | React.MutableRefObject<PanGesture>;
     isPagerScrolling: SharedValue<boolean>;
     isScrollEnabled: SharedValue<boolean>;
     onTap: () => void;

@@ -119,6 +119,11 @@ const useTapGestures = ({
         [scaledContentWidth, scaledContentHeight, canvasSize, doubleTapScale],
     );
 
+    // NOTICE: double tap not working on chrome for iOS, does work on safari on iOS
+    // If we want to be compatible with chrome for iOS, one solution is to count tap number
+    // by hand. Or maybe a latter version of react-native-gesture-handler will be ok,
+    // current react-native-gesture-handler version is 2.14.1. Also notice that few later
+    // versions(2.15.0, 2.16.0, 2.16.1, 2.16.2) lead to ios build crash.
     const doubleTapGesture = Gesture.Tap()
         // The first argument is not used, but must be defined
         .onTouchesDown((_evt, state) => {

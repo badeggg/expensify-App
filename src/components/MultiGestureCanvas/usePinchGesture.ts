@@ -99,6 +99,7 @@ const usePinchGesture = ({
         .enabled(pinchEnabled)
         // The first argument is not used, but must be defined
         .onTouchesDown((_evt, state) => {
+            // console.log('==== onTouchesDown pinch');
             // We don't want to activate pinch gesture when we are swiping in the pager
             if (!shouldDisableTransformationGestures.value) {
                 return;
@@ -107,6 +108,7 @@ const usePinchGesture = ({
             state.fail();
         })
         .onStart((evt) => {
+            // console.log('==== onStart pinch');
             stopAnimation();
 
             // Set the origin focal point of the pinch gesture at the start of the gesture

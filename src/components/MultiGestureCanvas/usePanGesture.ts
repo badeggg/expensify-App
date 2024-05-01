@@ -49,16 +49,13 @@ const usePanGesture = ({
     const zoomedContentWidth = useDerivedValue(() => contentSize.width * totalScale.value, [contentSize.width]);
     const zoomedContentHeight = useDerivedValue(() => contentSize.height * totalScale.value, [contentSize.height]);
 
-    // Used to track previous touch position for the "swipe down to close" gesture
-    const previousTouch = useSharedValue<{x: number; y: number} | null>(null);
-
     // Velocity of the pan gesture
     // We need to keep track of the velocity to properly phase out/decay the pan animation
     const panVelocityX = useSharedValue(0);
     const panVelocityY = useSharedValue(0);
 
-    // Disable "swipe down to close" gesture when content is bigger than the canvas
-    const enableSwipeDownToClose = useDerivedValue(() => canvasSize.height < zoomedContentHeight.value, [canvasSize.height]);
+    // Enable "swipe down to close" gesture when canvas is bigger than content
+    const enableSwipeDownToClose = useDerivedValue(() => canvasSize.height >= zoomedContentHeight.value, [canvasSize.height]);
 
     // Calculates bounds of the scaled content
     // Can we pan left/right/up/down
@@ -159,62 +156,80 @@ const usePanGesture = ({
         panVelocityY.value = 0;
     });
 
+    // Used to determine whether to activate pan gesture
+    const firstTouch = useSharedValue<{x: number; y: number} | null>(null);
+    const secondTouch = useSharedValue<{x: number; y: number} | null>(null);
+    const panGestureActive = useSharedValue<boolean>(false);
+
     const panGesture = Gesture.Pan()
+        // 'manualActivation' not working on mWeb, react-native-gesture-handler version 2.14.1.
+        // Later versions(2.15.0, 2.16.0, 2.16.1, 2.16.2) lead to ios build crash.
         .manualActivation(true)
         .averageTouches(true)
-        .onTouchesUp(() => {
-            previousTouch.value = null;
-        })
         .onTouchesMove((evt, state) => {
-            // We only allow panning when the content is zoomed in
+            // determine whether to active pan gesture
+
+            if (panGestureActive.value) {
+                return;
+            }
+
+            if (firstTouch.value && secondTouch.value) {
+                return;
+            }
+
+            // Allow panning when the content is zoomed in
             if (zoomScale.value > 1 && !shouldDisableTransformationGestures.value) {
+                panGestureActive.value = true;
                 state.activate();
+                return;
             }
 
-            // TODO: this needs tuning to work properly
-            if (!shouldDisableTransformationGestures.value && zoomScale.value === 1 && previousTouch.value !== null) {
-                const velocityX = Math.abs(evt.allTouches[0].x - previousTouch.value.x);
-                const velocityY = evt.allTouches[0].y - previousTouch.value.y;
-
-                if (Math.abs(velocityY) > velocityX && velocityY > 20) {
-                    state.activate();
-
-                    isSwipingDownToClose.value = true;
-                    previousTouch.value = null;
-
-                    return;
-                }
-            }
-
-            if (previousTouch.value === null) {
-                previousTouch.value = {
+            if (!firstTouch.value) {
+                firstTouch.value = {
                     x: evt.allTouches[0].x,
                     y: evt.allTouches[0].y,
                 };
+            } else if (!secondTouch.value) {
+                secondTouch.value = {
+                    x: evt.allTouches[0].x,
+                    y: evt.allTouches[0].y,
+                };
+            }
+
+            if (!shouldDisableTransformationGestures.value && zoomScale.value === 1 && firstTouch.value && secondTouch.value) {
+                const deltaX = Math.abs(secondTouch.value.x - firstTouch.value.x);
+                const deltaY = Math.abs(secondTouch.value.y - firstTouch.value.y);
+
+                if (deltaY > deltaX) {
+                    panGestureActive.value = true;
+                    state.activate();
+                }
             }
         })
         .onStart(() => {
             stopAnimation();
         })
-        .onChange((evt) => {
+        .onUpdate((evt) => {
             // Since we're running both pinch and pan gesture handlers simultaneously,
             // we need to make sure that we don't pan when we pinch since we track it as pinch focal gesture.
             if (evt.numberOfPointers > 1) {
+                return;
+            }
+            if (!panGestureActive.value) {
                 return;
             }
 
             panVelocityX.value = evt.velocityX;
             panVelocityY.value = evt.velocityY;
 
-            if (!isSwipingDownToClose.value) {
-                panTranslateX.value += evt.changeX;
+            panTranslateX.value = evt.translationX;
+            panTranslateY.value = evt.translationY;
+        })
+        .onFinalize((evt) => {
+            if (evt.velocityY > 100 && enableSwipeDownToClose.value) {
+                isSwipingDownToClose.value = true;
             }
 
-            if (enableSwipeDownToClose.value || isSwipingDownToClose.value) {
-                panTranslateY.value += evt.changeY;
-            }
-        })
-        .onEnd(() => {
             // Add pan translation to total offset and reset gesture variables
             offsetX.value += panTranslateX.value;
             offsetY.value += panTranslateY.value;
@@ -222,8 +237,12 @@ const usePanGesture = ({
             // Reset pan gesture variables
             panTranslateX.value = 0;
             panTranslateY.value = 0;
-            previousTouch.value = null;
 
+            firstTouch.value = null;
+            secondTouch.value = null;
+            panGestureActive.value = false;
+
+            // todo to check this
             // If we are swiping (in the pager), we don't want to return to boundaries
             if (shouldDisableTransformationGestures.value) {
                 return;

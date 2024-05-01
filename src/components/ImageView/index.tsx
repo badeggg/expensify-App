@@ -4,6 +4,7 @@ import type {GestureResponderEvent, LayoutChangeEvent} from 'react-native';
 import {View} from 'react-native';
 import FullscreenLoadingIndicator from '@components/FullscreenLoadingIndicator';
 import Image from '@components/Image';
+import Lightbox from '@components/Lightbox';
 import RESIZE_MODES from '@components/Image/resizeModes';
 import type {ImageOnLoadEvent} from '@components/Image/types';
 import PressableWithoutFeedback from '@components/Pressable/PressableWithoutFeedback';
@@ -194,24 +195,11 @@ function ImageView({isAuthTokenRequired = false, url, fileName, onError}: ImageV
 
     if (canUseTouchScreen) {
         return (
-            <View
-                style={[styles.imageViewContainer, styles.overflowHidden]}
-                onLayout={onContainerLayoutChanged}
-            >
-                <Image
-                    source={{uri: url}}
-                    isAuthTokenRequired={isAuthTokenRequired}
-                    // Hide image until finished loading to prevent showing preview with wrong dimensions.
-                    style={isLoading || zoomScale === 0 ? undefined : [styles.w100, styles.h100]}
-                    // When Image dimensions are lower than the container boundary(zoomscale <= 1), use `contain` to render the image with natural dimensions.
-                    // Both `center` and `contain` keeps the image centered on both x and y axis.
-                    resizeMode={zoomScale > 1 ? RESIZE_MODES.center : RESIZE_MODES.contain}
-                    onLoadStart={imageLoadingStart}
-                    onLoad={imageLoad}
-                    onError={onError}
-                />
-                {(isLoading || zoomScale === 0) && <FullscreenLoadingIndicator style={[styles.opacity1, styles.bgTransparent]} />}
-            </View>
+            <Lightbox
+                uri={url}
+                isAuthTokenRequired={isAuthTokenRequired}
+                onError={onError}
+            />
         );
     }
     return (

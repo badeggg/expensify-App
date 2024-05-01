@@ -1,6 +1,7 @@
 import type {ForwardedRef} from 'react';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
+import type {PanGesture} from 'react-native-gesture-handler';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import type {GestureRef} from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
 import type PagerView from 'react-native-pager-view';
@@ -40,7 +41,7 @@ type MultiGestureCanvasProps = ChildrenProps & {
     shouldDisableTransformationGestures?: SharedValue<boolean>;
 
     /** If there is a pager wrapping the canvas, we need to disable the pan gesture in case the pager is swiping */
-    pagerRef?: ForwardedRef<PagerView>; // TODO: For TS migration: Exclude<GestureRef, number>
+    pagerRef?: ForwardedRef<PagerView> | React.MutableRefObject<PanGesture>; // TODO: For TS migration: Exclude<GestureRef, number>
 
     /** Handles scale changed event */
     onScaleChanged?: OnScaleChangedCallback;
