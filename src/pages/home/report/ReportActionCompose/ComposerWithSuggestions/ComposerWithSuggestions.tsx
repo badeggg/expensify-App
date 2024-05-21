@@ -470,6 +470,7 @@ function ComposerWithSuggestions(
     );
 
     const prepareCommentAndResetComposer = useCallback((): string => {
+        // here trim
         const trimmedComment = commentRef.current.trim();
         const commentLength = ReportUtils.getCommentLength(trimmedComment, {reportID});
 
