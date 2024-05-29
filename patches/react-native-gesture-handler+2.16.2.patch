@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-gesture-handler/apple/RNGestureHandlerModule.mm b/node_modules/react-native-gesture-handler/apple/RNGestureHandlerModule.mm
+index d36fcf4..959d9f5 100644
+--- a/node_modules/react-native-gesture-handler/apple/RNGestureHandlerModule.mm
++++ b/node_modules/react-native-gesture-handler/apple/RNGestureHandlerModule.mm
+@@ -100,7 +100,7 @@ void decorateRuntime(jsi::Runtime &runtime)
+         if (!arguments[0].isObject()) {
+           return jsi::Value::null();
+         }
+-        auto shadowNode = arguments[0].asObject(runtime).getNativeState<ShadowNode>(runtime);
++        auto shadowNode = arguments[0].asObject(runtime).getHostObject<ShadowNodeWrapper>(runtime)->shadowNode;
+         bool isFormsStackingContext = shadowNode->getTraits().check(ShadowNodeTraits::FormsStackingContext);
+ 
+         return jsi::Value(isFormsStackingContext);

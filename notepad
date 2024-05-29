@@ -1,7 +1,23 @@
-components/Attachments/AttachmentCarousel/
+====================== to log on ios mobile:
+chrome://inspect
+https://www.headspin.io/blog/tips-and-tricks-for-using-inspect-element-on-ios#:~:text=On%20your%20iPhone%20or%20iPad%2C%20go%20to%20%22Settings%22%20and,the%20%22Web%20Inspector%22%20option.&text=Connect%20your%20iPhone%2FiPad%20to,are%20recognized%20by%20each%20other.
 
-components/ImageView/index.tsx
+========================== related files:
 
-components/Lightbox/index.tsx
+src/components/Attachments/AttachmentCarousel/index.tsx
+src/components/Attachments/AttachmentCarousel/index.native.tsx
 
-components/MultiGestureCanvas/
+src/components/Attachments/AttachmentCarousel/CarouselItem.tsx
+
+src/components/Attachments/AttachmentView/index.tsx
+
+src/components/Attachments/AttachmentView/AttachmentViewImage/index.tsx
+
+src/components/ImageView/index.tsx
+src/components/ImageView/index.native.tsx
+
+src/components/Lightbox/index.tsx
+
+src/components/MultiGestureCanvas/index.tsx
+
+===============================
