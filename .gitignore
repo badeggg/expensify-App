@@ -125,3 +125,7 @@ config/webpack/*.pem
 .expo
 dist/
 web-build/
+
+# vim temporary files
+*.swp
+*.swo

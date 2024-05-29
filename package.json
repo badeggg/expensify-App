@@ -58,7 +58,7 @@
     "gh-actions-unused-styles": "./.github/scripts/findUnusedKeys.sh",
     "workflow-test": "./workflow_tests/scripts/runWorkflowTests.sh",
     "workflow-test:generate": "ts-node workflow_tests/utils/preGenerateTest.ts",
-    "setup-https": "mkcert -install && mkcert -cert-file config/webpack/certificate.pem -key-file config/webpack/key.pem dev.new.expensify.com localhost 127.0.0.1",
+    "setup-https": "mkcert -install && mkcert -cert-file config/webpack/certificate.pem -key-file config/webpack/key.pem dev.new.expensify.com localhost 127.0.0.1 192.168.0.200",
     "e2e-test-runner-build": "ncc build tests/e2e/testRunner.ts -o tests/e2e/dist/"
   },
   "dependencies": {
@@ -145,7 +145,7 @@
     "react-native-document-picker": "^9.1.1",
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-fs": "^2.20.0",
-    "react-native-gesture-handler": "2.14.1",
+    "react-native-gesture-handler": "^2.16.2",
     "react-native-google-places-autocomplete": "2.5.6",
     "react-native-haptic-feedback": "^2.2.0",
     "react-native-image-picker": "^7.0.3",

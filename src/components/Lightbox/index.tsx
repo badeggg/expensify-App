@@ -37,7 +37,7 @@ type LightboxProps = {
 };
 
 /**
- * On the native layer, we use a image library to handle zoom functionality
+ * We use a image library to handle zoom functionality
  */
 function Lightbox({isAuthTokenRequired = false, uri, onScaleChanged: onScaleChangedProp, onError, style, zoomRange = DEFAULT_ZOOM_RANGE}: LightboxProps) {
     const StyleUtils = useStyleUtils();

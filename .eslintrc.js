@@ -100,6 +100,8 @@ module.exports = {
         __DEV__: 'readonly',
     },
     rules: {
+        // todo to delete this line
+        'no-console': 'off',
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-assignment': 'off',
