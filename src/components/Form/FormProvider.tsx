@@ -361,6 +361,26 @@ function FormProvider(
     );
     const value = useMemo(() => ({registerInput}), [registerInput]);
 
+    useEffect(() => {
+        console.log('=====5 FormProvider.tsx props changing');
+    }, [
+        // formID,
+        // validate,
+        // shouldValidateOnBlur,
+        // shouldValidateOnChange,
+        children,
+
+        // formState,
+        // network,
+        // enabledWhenOffline,
+        // draftValues,
+        // onSubmit,
+        // shouldTrimValues,
+        // rest,
+    ]);
+
+    console.log('==== render FormProvider.tsx');
+
     return (
         <FormContext.Provider value={value}>
             {/* eslint-disable react/jsx-props-no-spreading */}

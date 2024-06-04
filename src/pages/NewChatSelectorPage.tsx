@@ -13,6 +13,8 @@ function NewChatSelectorPage() {
     const {translate} = useLocalize();
     const navigation = useNavigation();
 
+    console.log('==== render NewChatSelectorPage.tsx');
+
     return (
         <ScreenWrapper
             shouldEnableKeyboardAvoidingView={false}

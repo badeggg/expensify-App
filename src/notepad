@@ -1,0 +1,18 @@
+https://stackoverflow.com/questions/71165507/updating-a-usestate-to-the-value-that-its-already-holding-inside-of-a-custom-re
+
+
+## Proposal
+
+### Please re-state the problem that we are trying to solve in this issue.
+App crashes when going back from new room page while keyboard is showing.
+
+### What is the root cause of that problem?
+The apparent cause is this line is called indefinitely
+https://github.com/Expensify/App/blob/f26c9f5199be70fe9ab1fdd668b95cb6ebb430fc/src/hooks/useAutoFocusInput.ts#L52
+
+But the route cause is that a loop is running. `setIsInputInitialized(true);` is just a chain node of the loop. Before explain the loop, let's recall the point that ["react bailing out of a state update"](https://legacy.reactjs.org/docs/hooks-reference.html#bailing-out-of-a-state-update) that I mentioned in https://github.com/Expensify/App/issues/42824#issuecomment-2149062855
+
+### What changes do you think we should make in order to solve the problem?
+
+### What alternative solutions did you explore? (Optional)
+N/A

@@ -1,0 +1,32 @@
+diff --git a/node_modules/@react-navigation/core/src/useIsFocused.tsx b/node_modules/@react-navigation/core/src/useIsFocused.tsx
+index d313579..2197a90 100644
+--- a/node_modules/@react-navigation/core/src/useIsFocused.tsx
++++ b/node_modules/@react-navigation/core/src/useIsFocused.tsx
+@@ -13,14 +13,19 @@ export default function useIsFocused(): boolean {
+ 
+   const valueToReturn = navigation.isFocused();
+ 
+-  if (isFocused !== valueToReturn) {
+-    // If the value has changed since the last render, we need to update it.
+-    // This could happen if we missed an update from the event listeners during re-render.
+-    // React will process this update immediately, so the old subscription value won't be committed.
+-    // It is still nice to avoid returning a mismatched value though, so let's override the return value.
+-    // This is the same logic as in https://github.com/facebook/react/tree/master/packages/use-subscription
+-    setIsFocused(valueToReturn);
+-  }
++  console.log('==== in useIsFocused body', isFocused, valueToReturn);
++
++  React.useEffect(() => {
++      if (isFocused !== valueToReturn) {
++        // If the value has changed since the last render, we need to update it.
++        // This could happen if we missed an update from the event listeners during re-render.
++        // React will process this update immediately, so the old subscription value won't be committed.
++        // It is still nice to avoid returning a mismatched value though, so let's override the return value.
++        // This is the same logic as in https://github.com/facebook/react/tree/master/packages/use-subscription
++        console.log('==== isFocused !== valueToReturn', isFocused, valueToReturn);
++        setIsFocused(valueToReturn);
++      }
++  }, [isFocused, valueToReturn]);
+ 
+   React.useEffect(() => {
+     const unsubscribeFocus = navigation.addListener('focus', () =>

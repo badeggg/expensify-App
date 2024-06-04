@@ -1,7 +1,7 @@
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import type {MaterialTopTabNavigationEventMap} from '@react-navigation/material-top-tabs';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import type {EventMapCore, NavigationState, ScreenListeners} from '@react-navigation/native';
-import React from 'react';
 import {withOnyx} from 'react-native-onyx';
 import type {OnyxEntry} from 'react-native-onyx';
 import type {TabSelectorProps} from '@components/TabSelector/TabSelector';
@@ -38,6 +38,12 @@ export const TopTab = createMaterialTopTabNavigator();
 // This takes all the same props as MaterialTopTabsNavigator: https://reactnavigation.org/docs/material-top-tab-navigator/#props,
 // except ID is now required, and it gets a `selectedTab` from Onyx
 function OnyxTabNavigator({id, selectedTab, children, onTabSelected = () => {}, screenListeners, ...rest}: OnyxTabNavigatorProps) {
+    useEffect(() => {
+        console.log('===== OnyxTabNavigator.tsx props changing');
+    }, [id, selectedTab, children, onTabSelected, screenListeners, rest]);
+
+    console.log('==== render OnyxTabNavigator.tsx');
+
     return (
         <TopTab.Navigator
             /* eslint-disable-next-line react/jsx-props-no-spreading */

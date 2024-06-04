@@ -47,10 +47,18 @@ export default function useAutoFocusInput(): UseAutoFocusInput {
         }, []),
     );
 
-    const inputCallbackRef = (ref: TextInput | null) => {
+    useEffect(() => {
+        console.log('=========== isInputInitialized', isInputInitialized);
+    }, [isInputInitialized]);
+
+    const inputCallbackRef = useCallback((ref: TextInput | null) => {
+        console.log('======= here 6 ref', !!ref);
         inputRef.current = ref;
+        // if (isInputInitialized) {
+        //     return;
+        // }
         setIsInputInitialized(true);
-    };
+    }, []);
 
     return {inputCallbackRef};
 }

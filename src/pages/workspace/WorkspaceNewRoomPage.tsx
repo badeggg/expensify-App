@@ -1,4 +1,4 @@
-import {useIsFocused} from '@react-navigation/core';
+import useIsFocused from '@react-navigation/core/src/useIsFocused';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
@@ -103,7 +103,7 @@ function WorkspaceNewRoomPage({policies, reports, formState, session, activePoli
     /**
      * @param values - form input values passed by the Form component
      */
-    const submit = (values: FormOnyxValues<typeof ONYXKEYS.FORMS.NEW_ROOM_FORM>) => {
+    const submit = useCallback((values: FormOnyxValues<typeof ONYXKEYS.FORMS.NEW_ROOM_FORM>) => {
         const participants = [session?.accountID ?? 0];
         const parsedDescription = ReportUtils.getParsedComment(values.reportDescription ?? '');
         const policyReport = ReportUtils.buildOptimisticChatReport(
@@ -123,7 +123,9 @@ function WorkspaceNewRoomPage({policies, reports, formState, session, activePoli
         );
         setNewRoomReportID(policyReport.reportID);
         Report.addPolicyReport(policyReport);
-    };
+    },
+    [policyID, session?.accountID, visibility, writeCapability],
+    );
 
     useEffect(() => {
         Report.clearNewRoomFormError();
@@ -223,7 +225,7 @@ function WorkspaceNewRoomPage({policies, reports, formState, session, activePoli
 
     const {inputCallbackRef} = useAutoFocusInput();
 
-    const renderEmptyWorkspaceView = () => (
+    const renderEmptyWorkspaceView = useCallback(() => (
         <>
             <BlockingView
                 icon={Illustrations.TeleScope}
@@ -242,7 +244,54 @@ function WorkspaceNewRoomPage({policies, reports, formState, session, activePoli
             />
             {isSmallScreenWidth && <OfflineIndicator />}
         </>
+    ),
+    [isSmallScreenWidth, styles.mb5, styles.mh5, translate],
     );
+
+    useEffect(() => {
+        console.log('===== WorkspaceNewRoomPage.tsx props changing');
+    }, [policies, reports, formState, session, activePolicyID]);
+
+    useEffect(() => {
+        console.log('===== 23 WorkspaceNewRoomPage.tsx state changing');
+    }, [
+        // workspaceOptions,
+        // policyID,
+        // styles,
+        // isFocused,
+        // translate,
+        // isOffline,
+        // isSmallScreenWidth,
+        // visibility,
+        // writeCapability,
+
+        // wasLoading,
+        // visibilityDescription,
+        // isLoading,
+        // errorFields,
+        // activeWorkspaceID,
+        // activeWorkspaceOrDefaultID,
+
+        // newRoomReportID,
+        // validate,
+        // writeCapabilityOptions,
+
+        // visibilityOptions,
+
+        inputCallbackRef,
+
+        // isPolicyAdmin,
+
+        // renderEmptyWorkspaceView,
+        // submit,
+        // RoomNameInput,
+        // INPUT_IDS,
+        // TextInput,
+        // variables,
+        // ValuePicker,
+    ]);
+
+    console.log('==== render WorkspaceNewRoomPage.tsx');
 
     return (
         <ScreenWrapper
@@ -255,7 +304,24 @@ function WorkspaceNewRoomPage({policies, reports, formState, session, activePoli
         >
             {({insets}) =>
                 workspaceOptions.length === 0 ? (
-                    renderEmptyWorkspaceView()
+                    <>
+                        <BlockingView
+                            icon={Illustrations.TeleScope}
+                            iconWidth={variables.emptyListIconWidth}
+                            iconHeight={variables.emptyListIconHeight}
+                            title={translate('workspace.emptyWorkspace.notFound')}
+                            subtitle={translate('workspace.emptyWorkspace.description')}
+                            shouldShowLink={false}
+                        />
+                        <Button
+                            success
+                            large
+                            text={translate('footer.learnMore')}
+                            onPress={() => Navigation.navigate(ROUTES.SETTINGS_WORKSPACES)}
+                            style={[styles.mh5, styles.mb5]}
+                        />
+                        {isSmallScreenWidth && <OfflineIndicator />}
+                    </>
                 ) : (
                     <KeyboardAvoidingView
                         style={styles.h100}
