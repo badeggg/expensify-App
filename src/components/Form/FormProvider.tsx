@@ -361,6 +361,8 @@ function FormProvider(
     );
     const value = useMemo(() => ({registerInput}), [registerInput]);
 
+    console.log('==== render FormProvider.tsx');
+
     return (
         <FormContext.Provider value={value}>
             {/* eslint-disable react/jsx-props-no-spreading */}

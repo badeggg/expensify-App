@@ -1,0 +1,13 @@
+diff --git a/node_modules/@react-navigation/core/src/useIsFocused.tsx b/node_modules/@react-navigation/core/src/useIsFocused.tsx
+index d313579..62c70a1 100644
+--- a/node_modules/@react-navigation/core/src/useIsFocused.tsx
++++ b/node_modules/@react-navigation/core/src/useIsFocused.tsx
+@@ -13,6 +13,8 @@ export default function useIsFocused(): boolean {
+ 
+   const valueToReturn = navigation.isFocused();
+ 
++  console.log(`==== in useIsFocused body [${isFocused !== valueToReturn}]`, isFocused, valueToReturn);
++
+   if (isFocused !== valueToReturn) {
+     // If the value has changed since the last render, we need to update it.
+     // This could happen if we missed an update from the event listeners during re-render.

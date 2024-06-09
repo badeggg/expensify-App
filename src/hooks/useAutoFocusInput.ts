@@ -10,6 +10,7 @@ type UseAutoFocusInput = {
 };
 
 export default function useAutoFocusInput(): UseAutoFocusInput {
+    const [foo, setFoo] = useState(false);
     const [isInputInitialized, setIsInputInitialized] = useState(false);
     const [isScreenTransitionEnded, setIsScreenTransitionEnded] = useState(false);
 
@@ -48,7 +49,13 @@ export default function useAutoFocusInput(): UseAutoFocusInput {
     );
 
     const inputCallbackRef = (ref: TextInput | null) => {
+        console.log('======= here ref', !!ref);
         inputRef.current = ref;
+        setFoo(true);
+        if (isInputInitialized) {
+            console.log('returning i1');
+            return;
+        }
         setIsInputInitialized(true);
     };
 

@@ -1,4 +1,4 @@
-import {useIsFocused} from '@react-navigation/core';
+import useIsFocused from '@react-navigation/core/src/useIsFocused';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
@@ -61,7 +61,7 @@ type WorkspaceNewRoomPageProps = WorkspaceNewRoomPageOnyxProps;
 
 function WorkspaceNewRoomPage({policies, reports, formState, session, activePolicyID}: WorkspaceNewRoomPageProps) {
     const styles = useThemeStyles();
-    const isFocused = useIsFocused();
+    const isFocused = useIsFocused('called by WorkspaceNewRoomPage.tsx');
     const {translate} = useLocalize();
     const {isOffline} = useNetwork();
     const {isSmallScreenWidth} = useWindowDimensions();
@@ -243,6 +243,8 @@ function WorkspaceNewRoomPage({policies, reports, formState, session, activePoli
             {isSmallScreenWidth && <OfflineIndicator />}
         </>
     );
+
+    console.log('==== render WorkspaceNewRoomPage.tsx');
 
     return (
         <ScreenWrapper
